@@ -13,7 +13,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [dbo].[usp_LoadDateDim] (@v_num_years as INT)
+--CREATE PROCEDURE [dbo].[usp_LoadDateDim] (@v_num_years as INT)
+CREATE PROCEDURE [dbo].[usp_LoadDateDim] (@v_num_days as INT)
 AS
 BEGIN
 /*****************************************************************************************************************
@@ -28,7 +29,7 @@ MODIFICATION LOG:
 Ver       Date         Author       Description
 -------   ----------   ----------   -----------------------------------------------------------------------------
 1.0       11/17/2019   JJAUSSI      1. Built this starter script for LDS BC IT 243
-
+1.1       03/17/2021   GRACRCHU     1. Enhance with @v_num_days for better precision
 
 RUNTIME: 
 1 sec
@@ -151,7 +152,8 @@ SELECT CONVERT(VARCHAR, (@v_first_date + n.n), 112) AS date_id
      , NULL AS holiday_ind -- Challenge field
      , NULL AS holiday_name -- Challenge field
   FROM dbo.Nums AS n
-  WHERE n.n <= (365 * @v_num_years)
+  --WHERE n.n <= (365 * @v_num_years)
+    WHERE n.n <= (@v_num_days + 1)
   ORDER BY 1;
 
 
@@ -172,41 +174,39 @@ SELECT 99991231 AS date_id
      , 99991231 AS week_start_date_id
      , '9999-12-31' AS week_end_date
      , 99991231 AS week_end_date_id
-     , NULL AS weekday_flag
-     , NULL AS weekend_flag
-     , NULL AS last_day_in_week_flag
-     , NULL AS month_number
-     , NULL AS month_name
-     , NULL AS month_abbreviation
-     , NULL AS month_last_day_number
-     , NULL AS month_start_date
-     , NULL AS month_start_date_id
-     , NULL AS month_end_date
-     , NULL AS month_end_date_id
-     , NULL AS month_end_date_previous
-     , NULL AS month_end_date_previous_id
-     , NULL AS last_day_in_month_flag
-     , NULL AS quarter_number
-     , NULL AS quarter_name
-     , NULL AS quarter_code
-     , NULL AS quarter_start_date
-     , NULL AS quarter_start_date_id
-     , NULL AS quarter_end_date
-     , NULL AS quarter_end_date_id
-     , NULL AS last_day_in_quarter_flag
-     , NULL AS year_number
-     , NULL AS year_start_date
-     , NULL AS year_start_date_id
-     , NULL AS year_end_date
-     , NULL AS year_end_date_id
-     , NULL AS yyyymm
-     , NULL AS last_day_in_year_flag
-     , NULL AS holiday_ind -- Challenge field
+     , 0 AS weekday_flag
+     , 0 AS weekend_flag
+     , 0 AS last_day_in_week_flag
+     , 0 AS month_number
+     , 'NA' AS month_name
+     , 'NA' AS month_abbreviation
+     , 0 AS month_last_day_number
+     , '9999-12-31' AS month_start_date
+     , 99991231 AS month_start_date_id
+     , '9999-12-31' AS month_end_date
+     , 99991231 AS month_end_date_id
+     , '9999-12-31' AS month_end_date_previous
+     , 99991231 AS month_end_date_previous_id
+     , 0 AS last_day_in_month_flag
+     , 0 AS quarter_number
+     , 'NA' AS quarter_name
+     , 'NA' AS quarter_code
+     , '9999-12-31' AS quarter_start_date
+     , 99991231 AS quarter_start_date_id
+     , '9999-12-31' AS quarter_end_date
+     , 99991231 AS quarter_end_date_id
+     , 0 AS last_day_in_quarter_flag
+     , 9999 AS year_number
+     , '9999-12-31' AS year_start_date
+     , 99991231 AS year_start_date_id
+     , '9999-12-31' AS year_end_date
+     , 99991231 AS year_end_date_id
+     , 999912 AS yyyymm
+     , 0 AS last_day_in_year_flag
+     , 0 AS holiday_ind -- Challenge field
      , NULL AS holiday_name -- Challenge field
 	 ;
 
   END;
 
 GO
-
-
